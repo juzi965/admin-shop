@@ -55,9 +55,12 @@
               prop="phoneNum">
               <el-input v-model="userInfo.phoneNum"></el-input>
             </el-form-item>
-            <el-form-item label="邮箱"
-              prop="email">
-              <el-input v-model="userInfo.email"></el-input>
+
+            <el-form-item label="新密码"
+              prop="password">
+              <el-input v-model="userInfo.password"
+                type="password"
+                autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -68,24 +71,25 @@
                 <el-option value="女"></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="邮箱"
+              prop="email">
+              <el-input v-model="userInfo.email"></el-input>
+            </el-form-item>
+
+            <el-form-item label="确认密码"
+              prop="checkPassword">
+              <el-input v-model="userInfo.checkPassword"
+                type="password"
+                autocomplete="off"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col>
             <el-form-item label="生日">
               <el-date-picker type="date"
                 placeholder="选择日期"
                 v-model="userInfo.birthday"
                 value-format="yyyy-MM-dd"
                 style="width: 100%;"></el-date-picker>
-            </el-form-item>
-            <el-form-item label="新密码"
-              prop="password">
-              <el-input v-model="userInfo.password"
-                type="password"
-                autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="确认密码"
-              prop="checkPassword">
-              <el-input v-model="userInfo.checkPassword"
-                type="password"
-                autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -103,26 +107,48 @@
 </template>
 
 <script>
+const qs = require('qs')
 export default {
   data() {
-    var validatePass = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请输入密码'))
-      } else {
-        if (this.userInfo.checkPassword !== '') {
-          this.$refs.userInfoFormRef.validateField('checkPassword')
-        }
-        callback()
+    let validatePass = (rule, value, callback) => {
+      if (this.userInfo.checkPassword !== '') {
+        this.$refs.userInfoFormRef.validateField('checkPassword')
       }
+      callback()
     }
-    var validatePass2 = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请再次输入密码'))
-      } else if (value !== this.userInfo.password) {
+    let validatePass2 = (rule, value, callback) => {
+      if (value !== this.userInfo.password) {
         callback(new Error('两次输入密码不一致!'))
       } else {
         callback()
       }
+    }
+    let validateUserName = (rule, value, callback) => {
+      this.$http
+        .post('/user/validateUserName', qs.stringify({ userName: value }))
+        .then(res => {
+          if (res.data.code !== 10000) {
+            callback(new Error(res.data.message))
+          } else callback()
+        })
+    }
+    let validateEmail = (rvarule, value, callback) => {
+      this.$http
+        .post('/user/validateEmail', qs.stringify({ email: value }))
+        .then(res => {
+          if (res.data.code !== 10000) {
+            callback(new Error(res.data.message))
+          } else callback()
+        })
+    }
+    let validatePhone = (rule, value, callback) => {
+      this.$http
+        .post('/user/validatePhone', qs.stringify({ phoneNum: value }))
+        .then(res => {
+          if (res.data.code !== 10000) {
+            callback(new Error(res.data.message))
+          } else callback()
+        })
     }
     return {
       registerDialog: false,
@@ -130,30 +156,38 @@ export default {
         userName: '',
         phoneNum: '',
         email: '',
-        gender: '',
+        gender: '男',
         birthday: '',
         password: '',
         checkPassword: ''
       },
-
       userInfoFormRules: {
         userName: [
           { required: true, message: '请输入姓名', trigger: 'blur' },
+          { validator: validateUserName, trigger: 'blur' },
           { min: 2, max: 15, message: '长度在 2 到 15 个字符', trigger: 'blur' }
         ],
         email: [
           { required: true, message: '请输入邮箱', trigger: 'blur' },
-          { min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
+          { validator: validateEmail, trigger: 'blur' },
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
         ],
         phoneNum: [
           { required: true, message: '请输入手机号', trigger: 'blur' },
-          { min: 11, max: 11, message: '长度在  11 个字符', trigger: 'blur' }
+          { validator: validatePhone, trigger: 'blur' },
+          {
+            pattern: /^0{0,1}(13[0-9]|15[0-9]||16[0-9]|18[0-9]|19[0-9])[0-9]{8}$/,
+            message: '手机号格式不对',
+            trigger: 'blur'
+          }
         ],
         password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
           { validator: validatePass, trigger: 'blur' },
           { min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur' }
         ],
         checkPassword: [
+          { required: true, message: '请输入确认密码', trigger: 'blur' },
           { validator: validatePass2, trigger: 'blur' },
           { min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur' }
         ]
@@ -180,7 +214,7 @@ export default {
         // 验证不通过不提交数据
         if (!valid) return
         // 请求登陆接口
-        const qs = require('qs')
+
         this.$http
           .post('/user/register', qs.stringify(this.userInfo))
           .then(res => {
@@ -198,7 +232,6 @@ export default {
         // 验证不通过不提交数据
         if (!valid) return
         // 请求登陆接口
-        const qs = require('qs')
         this.$http
           .post('/user/login', qs.stringify(this.loginForm))
           .then(res => {

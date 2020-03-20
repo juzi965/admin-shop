@@ -17,7 +17,7 @@
 <script>
 export default {
   computed: {
-    notifyList: function() {
+    notifyList() {
       return this.$store.state.notifyList
     }
   },
@@ -55,7 +55,7 @@ export default {
       })
       this.notifyList.push(event.data)
       this.$store.commit('setNotifyList', this.notifyList)
-      console.log('服务端返回：' + event.data)
+      // console.log('服务端返回：' + event.data)
     },
     setOncloseMessage() {
       console.log('WebSocket连接关闭    状态码：' + this.websocket.readyState)

@@ -12,7 +12,7 @@
         <el-col :span="8">
           <el-card style="background-color:#FFCCCC;font-size:20px"
             shadow="hover">
-            今日销售金额 <span style="font-size:30px">{{todayData.salesAmount}}</span> 元
+            今日销售额 <span style="font-size:30px">{{todayData.salesAmount}}</span> 元
           </el-card>
         </el-col>
         <el-col :span="8">

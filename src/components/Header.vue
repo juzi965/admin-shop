@@ -19,13 +19,16 @@
             width="300"
             title="通知消息"
             trigger="click">
+
             <el-timeline :reverse="true">
               <el-timeline-item v-for="(item, index) in notifyList"
                 :key="index"
-                :timestamp="item.time">
+                :timestamp="item.time"
+                size="large">
                 {{item.content}}
               </el-timeline-item>
             </el-timeline>
+
             <el-badge :value="this.$store.state.notifyList.length"
               slot="reference">
               <i style="font-size:20px;cursor: pointer; "
@@ -105,9 +108,46 @@
 </template>
 
 <script>
+const qs = require('qs')
 export default {
   name: 'Header',
   data() {
+    let validateUserName = (rule, value, callback) => {
+      this.$http
+        .post(
+          '/user/validateUserName',
+          qs.stringify({ id: this.userInfo.id, userName: value })
+        )
+        .then(res => {
+          if (res.data.code !== 10000) {
+            callback(new Error(res.data.message))
+          } else callback()
+        })
+    }
+    let validateEmail = (rvarule, value, callback) => {
+      this.$http
+        .post(
+          '/user/validateEmail',
+          qs.stringify({ id: this.userInfo.id, email: value })
+        )
+        .then(res => {
+          if (res.data.code !== 10000) {
+            callback(new Error(res.data.message))
+          } else callback()
+        })
+    }
+    let validatePhone = (rule, value, callback) => {
+      this.$http
+        .post(
+          '/user/validatePhone',
+          qs.stringify({ id: this.userInfo.id, phoneNum: value })
+        )
+        .then(res => {
+          if (res.data.code !== 10000) {
+            callback(new Error(res.data.message))
+          } else callback()
+        })
+    }
     return {
       userDialog: false,
       notifyDialog: false,
@@ -115,15 +155,22 @@ export default {
       userInfoFormRules: {
         userName: [
           { required: true, message: '请输入姓名', trigger: 'blur' },
-          { min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
+          { validator: validateUserName, trigger: 'blur' },
+          { min: 2, max: 15, message: '长度在 2 到 15 个字符', trigger: 'blur' }
         ],
         email: [
           { required: true, message: '请输入邮箱', trigger: 'blur' },
-          { min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
+          { validator: validateEmail, trigger: 'blur' },
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
         ],
         phoneNum: [
           { required: true, message: '请输入手机号', trigger: 'blur' },
-          { min: 11, max: 11, message: '长度在  11 个字符', trigger: 'blur' }
+          { validator: validatePhone, trigger: 'blur' },
+          {
+            pattern: /^0{0,1}(13[0-9]|15[0-9]||16[0-9]|18[0-9]|19[0-9])[0-9]{8}$/,
+            message: '手机号格式不对',
+            trigger: 'blur'
+          }
         ]
       }
     }
@@ -147,7 +194,7 @@ export default {
         // 验证不通过不提交数据
         if (!valid) return
         // 请求登陆接口
-        const qs = require('qs')
+
         this.$http
           .post('/user/saveUserInfo', qs.stringify(this.userInfo))
           .then(res => {

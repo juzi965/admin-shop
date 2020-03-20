@@ -19,7 +19,6 @@ export default new Vuex.Store({
     },
     setNotifyList(state, data) {
       state.notifyList = data
-      console.log(state.notifyList)
       window.sessionStorage.setItem('notifyList', JSON.stringify(data))
     }
   },
