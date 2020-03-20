@@ -3,7 +3,7 @@
     <el-card shadow="hover">
       <div slot="header"
         class="clearfix">
-        <span>新品上新</span>
+        <span>服装信息修改</span>
       </div>
       <div style="text-align:center">
         <el-row type="flex"
@@ -97,6 +97,7 @@
             :file-list="fileList"
             :data="uploadData"
             :on-change="fileChange"
+            :on-remove="picRemove"
             :auto-upload="false"
             action="http://localhost:8888/api/clothing/upload"
             list-type="picture-card">
@@ -138,7 +139,6 @@
             round>提交</el-button>
         </el-col>
       </el-row>
-
     </el-card>
   </div>
 </template>
@@ -154,6 +154,7 @@ export default {
         clothingId: ''
       },
       clothingFrom: {
+        clothingId: 0,
         clothingName: '',
         category: '',
         clothingContent: '',
@@ -165,6 +166,7 @@ export default {
           }
         ]
       },
+      deleteAttrs: [],
       clothingInfoRules: {
         clothingName: [
           { required: true, message: '请输入服装名', trigger: 'blur' },
@@ -196,9 +198,32 @@ export default {
       }
     }
   },
+  created() {
+    this.getData()
+  },
   methods: {
+    getData() {
+      this.$http.get('/clothing/' + this.$route.query.id).then(res => {
+        if (res.data.code === 10000) {
+          this.clothingFrom.clothingId = res.data.data.id
+          this.clothingFrom.clothingName = res.data.data.clothingName
+          this.clothingFrom.category = res.data.data.category
+          this.clothingFrom.clothingContent = res.data.data.clothingContent
+          this.clothingFrom.attrList = res.data.data.clothingAttrList
+          res.data.data.pictureInfoList.forEach((item, index) => {
+            this.fileList.push({
+              id: item.id,
+              name: item.name,
+              url: item.fileDomain + item.path
+            })
+          })
+        }
+      })
+    },
     removeAttr(index) {
       if (this.clothingFrom.attrList.length > 1) {
+        this.clothingFrom.attrList[index].delFlag = -1
+        this.deleteAttrs.push(this.clothingFrom.attrList[index])
         this.clothingFrom.attrList.splice(index, 1)
       }
     },
@@ -209,12 +234,25 @@ export default {
         this.clothingFrom.attrList.push({
           size: '',
           price: '',
-          stock: ''
+          stock: '',
+          delFlag: 0
         })
       })
     },
     fileChange(file, dataList) {
       this.fileList = dataList
+    },
+    picRemove(file, dataList) {
+      const qs = require('qs')
+      this.$http
+        .post('/clothing/delete-file', qs.stringify({ picId: file.id }))
+        .then(res => {
+          if (res.data.code === 10000) {
+            this.$message.success('删除成功')
+          } else {
+            this.$message.warning(res.data.message)
+          }
+        })
     },
     nextStep() {
       if (this.currentStep === 1) {
@@ -230,11 +268,14 @@ export default {
       }
     },
     saveClothing() {
-      this.$http.post('/clothing/add', this.clothingFrom).then(res => {
-        if (res.data.code == 10000) {
-          this.uploadData.clothingId = res.data.data
+      this.clothingFrom.attrList = this.clothingFrom.attrList.concat(
+        this.deleteAttrs
+      )
+      this.$http.post('/clothing/edit', this.clothingFrom).then(res => {
+        if (res.data.code === 10000) {
+          this.uploadData.clothingId = this.clothingFrom.clothingId
           this.$refs.upload.submit()
-          this.$message.success('服装基本信息保存成功')
+          this.$message.success('服装基本信息修改成功')
           this.$router.push({
             path: '/clothing-info'
           })

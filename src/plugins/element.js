@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import 'element-ui/lib/theme-chalk/index.css';
-import 'element-ui/lib/theme-chalk/base.css';
+import 'element-ui/lib/theme-chalk/index.css'
+import 'element-ui/lib/theme-chalk/base.css'
 import {
   Button,
   Form,
@@ -49,10 +49,18 @@ import {
   Drawer,
   Tooltip,
   Pagination,
-  Scrollbar
+  Scrollbar,
+  Step,
+  Steps,
+  Upload,
+  Tree,
+  Notification,
+  Timeline,
+  TimelineItem,
+  Popover
 } from 'element-ui'
 
-import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
+import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
 Vue.use(Button)
 Vue.use(Form)
 Vue.use(FormItem)
@@ -99,13 +107,18 @@ Vue.use(Drawer)
 Vue.use(Tooltip)
 Vue.use(Pagination)
 Vue.use(Scrollbar)
+Vue.use(Step)
+Vue.use(Steps)
+Vue.use(Upload)
+Vue.use(Tree)
+Vue.use(Timeline)
+Vue.use(TimelineItem)
+Vue.use(Popover)
 
 Vue.component(CollapseTransition.name, CollapseTransition)
 
-
-
 //挂载消息弹框属性
 Vue.prototype.$message = Message
-
+Vue.prototype.$notify = Notification
 //挂载confirm属性
 Vue.prototype.$confirm = MessageBox.confirm
