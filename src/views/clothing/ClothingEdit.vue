@@ -249,8 +249,6 @@ export default {
         .then(res => {
           if (res.data.code === 10000) {
             this.$message.success('删除成功')
-          } else {
-            this.$message.warning(res.data.message)
           }
         })
     },
@@ -279,8 +277,6 @@ export default {
           this.$router.push({
             path: '/clothing-info'
           })
-        } else {
-          this.$message.warning(res.data.message)
         }
       })
     }

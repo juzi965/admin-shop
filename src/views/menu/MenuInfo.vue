@@ -142,8 +142,6 @@ export default {
             this.editDialog = false
             this.getData()
             this.$message.success('操作成功')
-          } else {
-            this.$message.warning(res.data.message)
           }
         })
     },
@@ -161,9 +159,7 @@ export default {
               if (res.data.code == 10000) {
                 this.getData()
                 this.$message.success('删除成功')
-              } else {
-                this.$message.warning(res.data.message)
-              }
+              } 
             })
         })
         .catch(() => {
@@ -180,8 +176,6 @@ export default {
       this.$http.get('/menu/' + menuName).then(res => {
         if (res.data.code == 10000) {
           this.menuList = res.data.data
-        } else {
-          this.$message.warning(res.data.message)
         }
       })
     }

@@ -1,21 +1,15 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
 import axios from 'axios'
 import router from '../router'
 import store from '../store'
-import { Loading } from 'element-ui'
+import {
+  Loading,
+  Message
+} from 'element-ui'
 
-Vue.use(Vuex)
-Vue.use(Loading)
 
 // 配置请求根路径
 axios.defaults.baseURL = 'http://localhost:8888/api'
-
-// 设置请求token
-// axios.interceptors.request.use(config => {
-//   config.headers.Authorization = window.sessionStorage.getItem('token')
-//   return config
-// })
 
 // 配置loading
 let loading
@@ -55,7 +49,12 @@ axios.interceptors.response.use(
     endLoading()
     // 无权限，跳转到登陆页面
     if (response.data.code === 55555) {
+      Message.warning(response.data.message)
       router.push('/login')
+    } else if (response.data.code === 10001) { // 参数绑定错误
+      Message.warning(response.data.data)
+    } else if (response.data.code === 99999) { //其他错误
+      Message.warning(response.data.message)
     }
     return response
   },

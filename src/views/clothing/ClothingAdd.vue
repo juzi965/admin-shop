@@ -238,9 +238,7 @@ export default {
           this.$router.push({
             path: '/clothing-info'
           })
-        } else {
-          this.$message.warning(res.data.message)
-        }
+        } 
       })
     }
   },

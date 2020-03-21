@@ -51,7 +51,7 @@
           </template>
         </el-table-column>
         <el-table-column label="下单用户"
-          width="80">
+          width="90">
           <template slot-scope="scope">
             <span style="font-size:12px"
               v-html="showDate(scope.row.userName)"></span>
@@ -240,8 +240,6 @@ export default {
         .then(res => {
           if (res.data.code == 10000) {
             this.pageInfo = res.data.data
-          } else {
-            this.$message.warning(res.data.message)
           }
         })
     }

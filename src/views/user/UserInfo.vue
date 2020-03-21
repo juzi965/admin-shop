@@ -131,8 +131,6 @@ export default {
           if (res.data.code == 10000) {
             this.getData()
             this.$message.success('分配成功')
-          } else {
-            this.$message.warning(res.data.message)
           }
         })
     },
@@ -147,8 +145,6 @@ export default {
         if (res.data.code == 10000) {
           this.getData()
           this.$message.success('撤销成功')
-        } else {
-          this.$message.warning(res.data.message)
         }
       })
     },
@@ -169,8 +165,6 @@ export default {
               if (res.data.code == 10000) {
                 this.getData()
                 this.$message.success('重置成功，密码为123456')
-              } else {
-                this.$message.warning(res.data.message)
               }
             })
         })
@@ -198,15 +192,11 @@ export default {
         .then(res => {
           if (res.data.code == 10000) {
             this.pageInfo = res.data.data
-          } else {
-            this.$message.warning(res.data.message)
-          }
+          } 
         })
       this.$http.get('/role/all/1/20').then(res => {
         if (res.data.code == 10000) {
           this.roleList = res.data.data.list
-        } else {
-          this.$message.warning(res.data.message)
         }
       })
     }

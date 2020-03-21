@@ -221,8 +221,6 @@ export default {
             if (res.data.code == 10000) {
               this.registerDialog = false
               this.$message.success('注册成功')
-            } else {
-              this.$message.warning(res.data.message)
             }
           })
       })
@@ -241,8 +239,6 @@ export default {
               this.$store.commit('setUserInfo', res.data.data)
               // 跳转到/index
               this.$router.push('/')
-            } else {
-              this.$message.warning(res.data.message)
             }
           })
       })
