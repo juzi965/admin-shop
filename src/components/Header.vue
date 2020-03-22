@@ -12,7 +12,7 @@
           </i>
           <span style="font-size:18px;">服装后台管理系统</span>
         </el-col>
-        <el-col :span="3">
+        <el-col :span="4">
           <span @click="edit"
             style="font-size:18px;margin-right:20px;cursor: pointer;">{{this.$store.state.userInfo.userName}}</span>
           <el-popover placement="bottom-start"
@@ -196,7 +196,10 @@ export default {
           .post('/user/saveUserInfo', qs.stringify(this.userInfo))
           .then(res => {
             if (res.data.code == 10000) {
+              this.userDialog = false
               this.$message.success('保存成功')
+              //保存用户信息
+              this.$store.commit('setUserInfo', res.data.data)
             }
           })
       })

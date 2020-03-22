@@ -98,6 +98,7 @@
             :data="uploadData"
             :on-change="fileChange"
             :on-remove="picRemove"
+            :on-success="picSuccess"
             :auto-upload="false"
             action="http://localhost:8888/api/clothing/upload"
             list-type="picture-card">
@@ -274,10 +275,12 @@ export default {
           this.uploadData.clothingId = this.clothingFrom.clothingId
           this.$refs.upload.submit()
           this.$message.success('服装基本信息修改成功')
-          this.$router.push({
-            path: '/clothing-info'
-          })
         }
+      })
+    },
+    picSuccess(res, file, fileList) {
+      this.$router.push({
+        path: '/clothing-info'
       })
     }
   },

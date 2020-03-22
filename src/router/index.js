@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '../store'
+
 
 Vue.use(VueRouter)
 
@@ -63,4 +65,13 @@ const router = new VueRouter({
   routes
 })
 
+// 挂载路由导航首位
+router.beforeEach((to, from, next) => {
+  if (store.state.userInfo === null && to.path !== '/login') {
+    next('/login')
+  } else {
+    next()
+  }
+
+})
 export default router

@@ -79,6 +79,12 @@
               v-html="showDate(scope.row.address)"></span>
           </template>
         </el-table-column>
+        <el-table-column label="总金额"
+          width="80">
+          <template slot-scope="scope">
+            <span style="font-size:13px">{{scope.row.totalPrice}}￥</span>
+          </template>
+        </el-table-column>
         <el-table-column label="快递号"
           min-width="90"
           align="center">

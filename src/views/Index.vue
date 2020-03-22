@@ -71,7 +71,7 @@ export default {
     // WebSocket
     if ('WebSocket' in window) {
       this.websocket = new WebSocket(
-        'ws://127.0.0.1:8888/websocket/' + this.$store.state.userInfo.userName
+        'ws://127.0.0.1:8888/websocket/' + this.$store.state.userInfo.id
       )
       this.initWebSocket()
     } else {
