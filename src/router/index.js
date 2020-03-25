@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '../store'
-
+import {
+  Message
+} from 'element-ui'
 
 Vue.use(VueRouter)
 
@@ -68,6 +70,7 @@ const router = new VueRouter({
 // 挂载路由导航首位
 router.beforeEach((to, from, next) => {
   if (store.state.userInfo === null && to.path !== '/login') {
+    Message.warning("请先登录")
     next('/login')
   } else {
     next()

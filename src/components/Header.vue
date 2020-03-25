@@ -10,7 +10,7 @@
             @click="changeCollapse"
             plain>
           </i>
-          <span style="font-size:18px;">服装后台管理系统</span>
+          <span style="font-size:20px;">服装后台管理系统</span>
         </el-col>
         <el-col :span="4">
           <span @click="edit"
@@ -219,7 +219,7 @@ export default {
           this.$router.push('/login')
         })
         .catch(() => {
-          this.$message.success('不退出啦，手滑点错了喽')
+          this.$message.success('手滑点错了')
         })
     }
   },

@@ -91,9 +91,9 @@ export default {
 .el-aside {
   color: #333;
   text-align: center;
-  padding: 15px 10px 0px 0px;
+  padding: 10px 10px 0px 0px;
 }
 .el-main {
-  padding: 15px 0px 0px 5px;
+  padding: 10px 0px 0px 0px;
 }
 </style>
