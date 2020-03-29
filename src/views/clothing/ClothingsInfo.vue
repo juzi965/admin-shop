@@ -20,18 +20,26 @@
               border
               size="mini">
               <el-table-column prop="size"
-                label="尺寸">
+                label="尺寸"
+                align="center">
               </el-table-column>
-              <el-table-column prop="price"
-                label="单价">
+              <el-table-column label="单价"
+                align="center">
+                <template slot-scope="scope">
+                  <span>{{scope.row.price}} 元</span>
+                </template>
               </el-table-column>
-              <el-table-column prop="stock"
-                label="库存量">
+              <el-table-column label="库存量"
+                align="center">
+                <template slot-scope="scope">
+                  <span>{{scope.row.stock}} 件</span>
+                </template>
               </el-table-column>
             </el-table>
           </template>
         </el-table-column>
-        <el-table-column label="名称">
+        <el-table-column label="名称"
+          align="center">
           <template slot-scope="scope">
             <span v-html="showDate(scope.row.clothingName)"></span>
           </template>
@@ -42,7 +50,8 @@
           </template>
         </el-table-column>
         <el-table-column label="介绍"
-          show-overflow-tooltip>
+          show-overflow-tooltip
+          align="center">
           <template slot-scope="scope">
             <span v-html="showDate(scope.row.clothingContent)"></span>
           </template>
@@ -55,9 +64,11 @@
           </template>
         </el-table-column>
         <el-table-column prop="createTime"
-          label="上架时间">
+          label="上架时间"
+          align="center">
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作"
+          align="center">
           <template slot-scope="scope">
             <el-button size="small"
               type="warning"
@@ -157,7 +168,7 @@ export default {
               if (res.data.code == 10000) {
                 this.getData()
                 this.$message.success('删除成功')
-              } 
+              }
             })
         })
         .catch(() => {

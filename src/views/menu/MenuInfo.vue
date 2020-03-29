@@ -49,12 +49,15 @@
       </el-tree>
       <el-dialog title="修改菜单信息"
         :visible.sync="editDialog"
-        width="30%">
+        width="30%"
+        @close="editDialogClose">
 
         <el-form ref="menuFormRef"
           class="login_form"
-          :model="menuInfoFrom">
-          <el-form-item label="菜单名称">
+          :model="menuInfoFrom"
+          :rules="menuInfoRules">
+          <el-form-item label="菜单名称"
+            prop="menuName">
             <el-input placeholder="请输入名称"
               v-model="menuInfoFrom.menuName" />
           </el-form-item>
@@ -66,7 +69,8 @@
             <el-input placeholder="请输入图标"
               v-model="menuInfoFrom.icon" />
           </el-form-item>
-          <el-form-item label="父菜单">
+          <el-form-item label="父菜单"
+            prop="parentId">
             <el-select v-model="menuInfoFrom.parentId"
               placeholder="请选择父菜单">
               <el-option label="无父级菜单"
@@ -107,6 +111,15 @@ export default {
         patch: '',
         icon: '',
         parentId: ''
+      },
+      menuInfoRules: {
+        menuName: [
+          { required: true, message: '请输入菜单名', trigger: 'blur' },
+          { min: 2, max: 15, message: '长度在 2 到 10 个字符', trigger: 'blur' }
+        ],
+        parentId: [
+          { required: true, message: '请选择父级菜单', trigger: 'blur' }
+        ]
       }
     }
   },
@@ -120,6 +133,9 @@ export default {
     }
   },
   methods: {
+    editDialogClose() {
+      this.$refs.menuFormRef.clearValidate()
+    },
     filterNode(value, data) {
       if (!value) return true
       return data.menuName.indexOf(value) !== -1
@@ -134,16 +150,20 @@ export default {
       this.editDialog = true
     },
     editMenu() {
-      const qs = require('qs')
-      this.$http
-        .post('/menu/save', qs.stringify(this.menuInfoFrom))
-        .then(res => {
-          if (res.data.code == 10000) {
-            this.editDialog = false
-            this.getData()
-            this.$message.success('操作成功')
-          }
-        })
+      this.$refs.menuFormRef.validate((valid, errorObject) => {
+        // 验证不通过不提交数据
+        if (!valid) return
+        const qs = require('qs')
+        this.$http
+          .post('/menu/save', qs.stringify(this.menuInfoFrom))
+          .then(res => {
+            if (res.data.code == 10000) {
+              this.editDialog = false
+              this.getData()
+              this.$message.success('操作成功')
+            }
+          })
+      })
     },
     deleteMenu(data) {
       this.$confirm('确定删除？', '提示', {
@@ -159,7 +179,7 @@ export default {
               if (res.data.code == 10000) {
                 this.getData()
                 this.$message.success('删除成功')
-              } 
+              }
             })
         })
         .catch(() => {

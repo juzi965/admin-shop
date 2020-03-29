@@ -53,9 +53,13 @@
     </el-card>
     <el-dialog title="修改菜单信息"
       :visible.sync="menuDialog"
+      @close="editDialogClose"
       width="30%">
-      <el-form :model="roleInfoForm">
-        <el-form-item label="角色名">
+      <el-form ref="roleInfoFormRef"
+        :model="roleInfoForm"
+        :rules="roleInfoRules">
+        <el-form-item label="角色名"
+          prop="roleName">
           <el-input v-model="roleInfoForm.roleName"></el-input>
         </el-form-item>
         <el-tree :props="defaultProps"
@@ -91,7 +95,13 @@ export default {
       menuList: [],
       checkList: [],
       menuDialog: false,
-      roleInfoForm: {}
+      roleInfoForm: {},
+      roleInfoRules: {
+        roleName: [
+          { required: true, message: '请输入角色名', trigger: 'blur' },
+          { min: 2, max: 15, message: '长度在 2 到 10 个字符', trigger: 'blur' }
+        ]
+      }
     }
   },
   created() {
@@ -99,6 +109,9 @@ export default {
     this.getMenuData()
   },
   methods: {
+    editDialogClose() {
+      this.$refs.roleInfoFormRef.clearValidate()
+    },
     add() {
       this.menuDialog = true
       this.$nextTick(() => {
@@ -138,19 +151,23 @@ export default {
       })
     },
     editRole() {
-      this.roleInfoForm.menuIds = this.$refs.menuTree
-        .getCheckedNodes()
-        .map(item => item.id)
-      const qs = require('qs')
-      this.$http
-        .post('/role/save', qs.stringify(this.roleInfoForm))
-        .then(res => {
-          if (res.data.code == 10000) {
-            this.menuDialog = false
-            this.getData()
-            this.$message.success('操作成功')
-          }
-        })
+      this.$refs.roleInfoFormRef.validate((valid, errorObject) => {
+        // 验证不通过不提交数据
+        if (!valid) return
+        this.roleInfoForm.menuIds = this.$refs.menuTree
+          .getCheckedNodes()
+          .map(item => item.id)
+        const qs = require('qs')
+        this.$http
+          .post('/role/save', qs.stringify(this.roleInfoForm))
+          .then(res => {
+            if (res.data.code == 10000) {
+              this.menuDialog = false
+              this.getData()
+              this.$message.success('操作成功')
+            }
+          })
+      })
     },
     changeCurrentPage(pageNum) {
       this.currentPage = pageNum

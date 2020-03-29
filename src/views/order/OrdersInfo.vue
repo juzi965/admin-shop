@@ -44,6 +44,7 @@
         </el-table-column>
         <el-table-column label="订单号"
           width="150"
+          align="center"
           show-overflow-tooltip>
           <template slot-scope="scope">
             <span style="font-size:12px"
@@ -51,21 +52,24 @@
           </template>
         </el-table-column>
         <el-table-column label="下单用户"
-          width="90">
+          width="90"
+          align="center">
           <template slot-scope="scope">
             <span style="font-size:12px"
               v-html="showDate(scope.row.userName)"></span>
           </template>
         </el-table-column>
         <el-table-column label="收件人"
-          width="70">
+          width="70"
+          align="center">
           <template slot-scope="scope">
             <span style="font-size:12px"
               v-html="showDate(scope.row.recipient)"></span>
           </template>
         </el-table-column>
         <el-table-column label="手机号"
-          width="100">
+          width="100"
+          align="center">
           <template slot-scope="scope">
             <span style="font-size:12px"
               v-html="showDate(scope.row.phoneNum)"></span>
@@ -73,6 +77,7 @@
         </el-table-column>
         <el-table-column label="收件地址"
           min-width="130"
+          align="center"
           show-overflow-tooltip>
           <template slot-scope="scope">
             <span style="font-size:12px"
@@ -80,7 +85,8 @@
           </template>
         </el-table-column>
         <el-table-column label="总金额"
-          width="80">
+          width="90"
+          align="center">
           <template slot-scope="scope">
             <span style="font-size:13px">{{scope.row.totalPrice}}￥</span>
           </template>
@@ -125,7 +131,8 @@
           </template>
         </el-table-column>
         <el-table-column label="下单时间"
-          width="150">
+          width="150"
+          align="center">
           <template slot-scope="scope">
             <span style="font-size:12px">{{scope.row.createTime}}</span>
           </template>

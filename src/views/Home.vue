@@ -2,23 +2,26 @@
   <div>
     <el-card shadow="hover">
 
-      <el-row :gutter="20">
+      <el-row :gutter="30">
         <el-col :span="8">
           <el-card style="background-color:#CCCCFF;font-size:20px"
             shadow="hover">
-            今日销售量 <span style="font-size:30px">{{todayData.salesVolume}}</span> 件
+            <span style="font-size:28px;display:block;margin-bottom:10px">{{todayData.salesVolume}}件</span>
+            <span>今日销售量</span>
           </el-card>
         </el-col>
         <el-col :span="8">
           <el-card style="background-color:#FFCCCC;font-size:20px"
             shadow="hover">
-            今日销售额 <span style="font-size:30px">{{todayData.salesAmount}}</span> 元
+            <span style="font-size:28px;display:block;margin-bottom:10px">{{todayData.salesAmount}}元</span>
+            <span>今日销售额</span>
           </el-card>
         </el-col>
         <el-col :span="8">
           <el-card style="background-color:#CCFFFF;font-size:20px"
             shadow="hover">
-            今日订单 <span style="font-size:30px">{{todayData.orderVolume}}</span> 单
+            <span style="font-size:28px;display:block;margin-bottom:10px">{{todayData.orderVolume}}单</span>
+            <span>今日订单量</span>
           </el-card>
         </el-col>
       </el-row>
@@ -46,11 +49,7 @@
 export default {
   data() {
     return {
-      todayData: {
-        salesVolume: 0,
-        salesAmount: 0,
-        orderVolume: 0
-      },
+      todayData: {},
       weekLineOption: {},
       monthLineOption: {},
       weekDay: ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
@@ -58,22 +57,13 @@ export default {
   },
   mounted() {},
   created() {
-    this.getTodayData()
     this.getMonthData()
   },
   methods: {
-    getTodayData() {
-      this.$http.get('/other/today').then(res => {
-        if (res.data.code === 10000) {
-          if (res.data.data != null) {
-            this.todayData = res.data.data
-          }
-        }
-      })
-    },
     getMonthData() {
       this.$http.get('/other/month').then(res => {
         if (res.data.code === 10000) {
+          this.todayData = res.data.data[res.data.data.length - 1]
           // this.weekLineOption = {
           //   title: {
           //     text: '近一周销售额折线图',
@@ -124,7 +114,7 @@ export default {
           // }
           this.monthLineOption = {
             title: {
-              text: '近三十日销售情况折线图',
+              text: '近三十日销售情况统计图',
               left: 'center'
             },
             grid: {
@@ -191,7 +181,7 @@ export default {
                 name: '销售额',
                 type: 'line',
                 // 设置折线上圆点大小
-                symbolSize: 8,
+                symbolSize: 5,
                 itemStyle: {
                   normal: { label: { show: true } }
                 },
@@ -209,7 +199,7 @@ export default {
                 name: '订单量',
                 type: 'line',
                 // 设置折线上圆点大小
-                symbolSize: 8,
+                symbolSize: 5,
                 yAxisIndex: 1,
                 itemStyle: {
                   normal: { label: { show: true } }
