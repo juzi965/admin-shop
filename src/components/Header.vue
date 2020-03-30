@@ -2,33 +2,36 @@
   <div>
     <el-card shadow="hover"
       style="line-height: 38px;">
-      <el-row type="flex"
-        justify="space-between">
-        <el-col :span="6">
+      <el-row>
+        <el-col :span="12"
+          style="text-align:left">
           <i :class="this.$store.state.isCollapse?'el-icon-s-unfold':'el-icon-s-fold'"
-            style="font-size:25px;margin-right:20px"
-            @click="changeCollapse"
-            plain>
+            style="font-size:25px;cursor: pointer;"
+            @click="changeCollapse">
           </i>
-          <span style="font-size:20px;">服装后台管理系统</span>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="12"
+          style="text-align:right">
           <span @click="edit"
             style="font-size:18px;margin-right:20px;cursor: pointer;">{{this.$store.state.userInfo.userName}}</span>
           <el-popover placement="bottom-start"
             width="300"
             title="通知消息"
             trigger="click">
-
+            <el-divider></el-divider>
             <el-timeline :reverse="true">
-              <el-timeline-item v-for="(item, index) in notifyList"
+              <el-timeline-item v-for="(item,index) in notifyList"
                 :key="index"
                 :timestamp="item.time"
                 size="large">
                 {{item.content}}
               </el-timeline-item>
             </el-timeline>
-
+            <el-divider></el-divider>
+            <el-button style="float:right"
+              size="small"
+              @click="clearNotify"
+              round>清空通知</el-button>
             <el-badge :value="this.$store.state.notifyList.length"
               slot="reference">
               <i style="font-size:20px;cursor: pointer; "
@@ -176,6 +179,9 @@ export default {
     }
   },
   methods: {
+    clearNotify() {
+      this.$store.commit('setNotifyList', [])
+    },
     edit() {
       this.getUserInfo()
       this.userDialog = true
@@ -238,4 +244,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.el-card {
+  .el-row {
+    display: flex;
+    align-items: center;
+  }
+}
 </style>

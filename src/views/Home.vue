@@ -2,39 +2,44 @@
   <div>
     <el-card shadow="hover">
 
-      <el-row :gutter="30">
-        <el-col :span="8">
+      <el-row :gutter="20">
+        <el-col :span="6">
           <el-card style="background-color:#CCCCFF;font-size:20px"
             shadow="hover">
             <span style="font-size:28px;display:block;margin-bottom:10px">{{todayData.salesVolume}}件</span>
             <span>今日销售量</span>
           </el-card>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
           <el-card style="background-color:#FFCCCC;font-size:20px"
             shadow="hover">
-            <span style="font-size:28px;display:block;margin-bottom:10px">{{todayData.salesAmount}}元</span>
+            <span style="font-size:28px;display:block;margin-bottom:10px">{{todayData.salesAmount}}￥</span>
             <span>今日销售额</span>
           </el-card>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
           <el-card style="background-color:#CCFFFF;font-size:20px"
             shadow="hover">
             <span style="font-size:28px;display:block;margin-bottom:10px">{{todayData.orderVolume}}单</span>
             <span>今日订单量</span>
           </el-card>
         </el-col>
+        <el-col :span="6">
+          <el-card style="background-color:#F8A2E8;font-size:20px"
+            shadow="hover">
+            <span style="font-size:28px;display:block;margin-bottom:10px">{{(todayData.salesAmount*100/monthData).toFixed(2)}}%</span>
+            <span>今日销售额占比(月)</span>
+          </el-card>
+        </el-col>
       </el-row>
-      <el-row :gutter="10"
-        style="margin-top: 30px;">
+      <el-row style="margin-top: 30px;">
         <!-- <el-col :lg="12"
           :md="12">
           <ECharts :options="weekLineOption"
             autoresize
             theme="light"></ECharts>
         </el-col> -->
-        <el-col :lg="24"
-          :md="24">
+        <el-col>
           <ECharts :options="monthLineOption"
             autoresize
             theme="light"></ECharts>
@@ -50,6 +55,7 @@ export default {
   data() {
     return {
       todayData: {},
+      monthData: '',
       weekLineOption: {},
       monthLineOption: {},
       weekDay: ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
@@ -64,6 +70,10 @@ export default {
       this.$http.get('/other/month').then(res => {
         if (res.data.code === 10000) {
           this.todayData = res.data.data[res.data.data.length - 1]
+          this.monthData = res.data.data.reduce((acc, cur) => {
+            return Number(acc) + Number(cur.salesAmount)
+          }, 0)
+
           // this.weekLineOption = {
           //   title: {
           //     text: '近一周销售额折线图',
@@ -114,7 +124,7 @@ export default {
           // }
           this.monthLineOption = {
             title: {
-              text: '近三十日销售情况统计图',
+              text: '近十五日销售情况统计图',
               left: 'center'
             },
             grid: {
@@ -180,8 +190,8 @@ export default {
               {
                 name: '销售额',
                 type: 'line',
-                // 设置折线上圆点大小
-                symbolSize: 5,
+                smooth: true,
+                symbolSize: 'none',
                 itemStyle: {
                   normal: { label: { show: true } }
                 },
@@ -198,8 +208,8 @@ export default {
               {
                 name: '订单量',
                 type: 'line',
-                // 设置折线上圆点大小
-                symbolSize: 5,
+                smooth: true,
+                symbolSize: 'none',
                 yAxisIndex: 1,
                 itemStyle: {
                   normal: { label: { show: true } }

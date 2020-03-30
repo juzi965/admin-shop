@@ -1,12 +1,12 @@
 <template>
   <el-container>
-    <el-header height="85px">
-      <Header />
-    </el-header>
+    <el-aside width="auto">
+      <LeftMenu />
+    </el-aside>
     <el-container>
-      <el-aside width="auto">
-        <LeftMenu />
-      </el-aside>
+      <el-header height="85px">
+        <Header />
+      </el-header>
       <el-main>
         <router-view />
       </el-main>
@@ -91,7 +91,7 @@ export default {
 .el-aside {
   color: #333;
   text-align: center;
-  padding: 10px 10px 0px 0px;
+  padding: 0px 10px 0px 0px;
 }
 .el-main {
   padding: 10px 0px 0px 0px;

@@ -1,11 +1,14 @@
 <template>
   <div>
     <el-card shadow="hover">
+
       <el-menu :default-active="this.$route.path"
         :collapse="this.$store.state.isCollapse"
         class="el-menu-vertical"
         unique-opened
         router>
+        <img src="http://localhost:8089/logo/logo.png"
+          width="100%">
         <el-menu-item index="/home">
           <i class="el-icon-s-home"></i>
           <span slot="title">主页</span>
@@ -84,7 +87,7 @@ export default {
   width: 150px;
 }
 .el-menu-vertical {
-  min-height: 400px;
+  min-height: 560px;
 }
 .el-submenu {
   span {

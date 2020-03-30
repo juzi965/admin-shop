@@ -44,7 +44,8 @@
             <span v-html="showDate(scope.row.clothingName)"></span>
           </template>
         </el-table-column>
-        <el-table-column label="类别">
+        <el-table-column label="类别"
+          align="center">
           <template slot-scope="scope">
             <span v-html="showDate(scope.row.category)"></span>
           </template>

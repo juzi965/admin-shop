@@ -57,7 +57,9 @@ import {
   Notification,
   Timeline,
   TimelineItem,
-  Popover
+  Popover,
+  Breadcrumb,
+  BreadcrumbItem,
 } from 'element-ui'
 
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
@@ -114,6 +116,8 @@ Vue.use(Tree)
 Vue.use(Timeline)
 Vue.use(TimelineItem)
 Vue.use(Popover)
+Vue.use(Breadcrumb)
+Vue.use(BreadcrumbItem)
 
 Vue.component(CollapseTransition.name, CollapseTransition)
 

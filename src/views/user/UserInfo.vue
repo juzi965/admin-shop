@@ -192,7 +192,7 @@ export default {
         .then(res => {
           if (res.data.code == 10000) {
             this.pageInfo = res.data.data
-          } 
+          }
         })
       this.$http.get('/role/all/1/20').then(res => {
         if (res.data.code == 10000) {
