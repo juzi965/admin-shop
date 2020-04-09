@@ -7,11 +7,11 @@
         class="el-menu-vertical"
         unique-opened
         router>
-        <img src="http://localhost:8089/logo/logo.png"
+        <img src="https://file.hooya.top:8080/logo/logo.png"
           width="100%">
         <el-menu-item index="/home">
           <i class="el-icon-s-home"></i>
-          <span slot="title">主页</span>
+          <span slot="title">首页</span>
         </el-menu-item>
         <el-submenu v-for="menu in this.$store.state.userInfo.menuTree"
           :key="menu.id"

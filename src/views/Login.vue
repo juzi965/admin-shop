@@ -3,10 +3,13 @@
     <el-main>
       <el-row type="flex"
         justify="center"
-        class="login_row">
-        <el-col :span="8">
+        style="text-align:center;transform: translateY(20%);">
+        <el-col :lg="8"
+          :md="12"
+          :sm="20"
+          :xs="24">
           <el-card>
-            <div class="avatar_box">
+            <div style="padding-bottom: 20px;">
               <el-avatar :size="80"
                 src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
             </div>
@@ -25,12 +28,16 @@
                   prefix-icon="el-icon-lock"
                   v-model="loginForm.password" />
               </el-form-item>
-              <el-form-item class="btns">
+              <el-form-item>
                 <el-button type="primary"
+                  style="width:100%"
                   @click="sublimtLogin">登录</el-button>
                 <!-- <el-button type="info"
                   @click="reset">重置</el-button> -->
+              </el-form-item>
+              <el-form-item>
                 <el-button type="info"
+                  style="width:100%"
                   @click="registerDialog = true">注册</el-button>
               </el-form-item>
             </el-form>
@@ -98,7 +105,7 @@
           <el-col :span="12">
             <el-button type="primary"
               style="width: 100%;"
-              @click="register">保存信息</el-button>
+              @click="register">注册</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -256,17 +263,5 @@ export default {
   width: 100%;
   height: 100%;
   background-color: #f4f4f4;
-}
-.login_row {
-  width: 100%;
-  height: 100%;
-  .avatar_box {
-    text-align: center;
-    padding-bottom: 20px;
-  }
-}
-.btns {
-  display: flex;
-  justify-content: flex-end;
 }
 </style>

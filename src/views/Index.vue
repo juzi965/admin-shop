@@ -16,6 +16,16 @@
 
 <script>
 export default {
+  data() {
+    return {
+      websocket: null,
+      wurl:
+        'wss://api.hooya.top:8080/websocket/' + this.$store.state.userInfo.id,
+      // 心跳检测, 每隔一段时间检测连接状态，如果处于连接中，就向server端主动发送消息，来重置server端与客户端的最大连接时间，如果已经断开了，发起重连。
+      heartCheck: null,
+      timeout: 50000
+    }
+  },
   computed: {
     notifyList() {
       return this.$store.state.notifyList
@@ -40,12 +50,10 @@ export default {
       window.onbeforeunload = this.onbeforeunload
     },
     setErrorMessage() {
-      console.log(
-        'WebSocket连接发生错误   状态码：' + this.websocket.readyState
-      )
+      console.log('WebSocket连接发生错误  状态码：' + this.websocket.readyState)
     },
     setOnopenMessage() {
-      console.log('WebSocket连接成功    状态码：' + this.websocket.readyState)
+      console.log('WebSocket连接成功  状态码：' + this.websocket.readyState)
     },
     setOnmessageMessage(event) {
       this.$notify.warning({
@@ -55,10 +63,11 @@ export default {
       })
       this.notifyList.push(event.data)
       this.$store.commit('setNotifyList', this.notifyList)
+
       // console.log('服务端返回：' + event.data)
     },
     setOncloseMessage() {
-      console.log('WebSocket连接关闭    状态码：' + this.websocket.readyState)
+      console.log('WebSocket连接关闭  状态码：' + this.websocket.readyState)
     },
     onbeforeunload() {
       this.closeWebSocket()
@@ -70,16 +79,23 @@ export default {
   mounted() {
     // WebSocket
     if ('WebSocket' in window) {
-      this.websocket = new WebSocket(
-        'ws://127.0.0.1:8888/websocket/' + this.$store.state.userInfo.id
-      )
+      this.websocket = new WebSocket(this.wurl)
       this.initWebSocket()
     } else {
       this.$message.warning('当前浏览器不支持 WebSocket')
     }
+    this.heartCheck = setInterval(() => {
+      if (this.websocket.readyState === 1) {
+        console.log('WebSocket心跳检测')
+        this.websocket.send('ping')
+      } else {
+        console.log('断开状态')
+      }
+    }, this.timeout)
   },
   beforeDestroy() {
     this.onbeforeunload()
+    clearInterval(this.heartCheck)
   }
 }
 </script>

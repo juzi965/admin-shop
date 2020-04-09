@@ -28,7 +28,7 @@
           <el-card style="background-color:#F8A2E8;font-size:20px"
             shadow="hover">
             <span style="font-size:28px;display:block;margin-bottom:10px">{{(todayData.salesAmount*100/monthData).toFixed(2)}}%</span>
-            <span>今日销售额占比(月)</span>
+            <span>今日销售额占比(十五日)</span>
           </el-card>
         </el-col>
       </el-row>

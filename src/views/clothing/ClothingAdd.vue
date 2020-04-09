@@ -99,7 +99,7 @@
             :on-change="fileChange"
             :on-success="picSuccess"
             :auto-upload="false"
-            action="http://localhost:8888/api/clothing/upload"
+            action="https://api.hooya.top:8080/api/clothing/upload"
             list-type="picture-card">
             <i class="el-icon-plus"></i>
           </el-upload>

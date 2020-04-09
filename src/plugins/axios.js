@@ -9,7 +9,8 @@ import {
 
 
 // 配置请求根路径
-axios.defaults.baseURL = 'http://localhost:8888/api'
+// axios.defaults.baseURL = 'http://localhost:8888/api'
+axios.defaults.baseURL = 'https://api.hooya.top:8080/api'
 
 // 配置loading
 let loading
@@ -19,7 +20,7 @@ function statrLoading() {
     lock: true,
     text: 'Loading',
     spinner: 'el-icon-loading',
-    background: 'rgba(0, 0, 0, 0.7)'
+    background: 'rgba(255, 255, 255, 0.5)'
   })
 }
 

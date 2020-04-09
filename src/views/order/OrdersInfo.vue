@@ -103,7 +103,7 @@
             <span v-else
               style="font-size:12px;cursor:pointer"
               v-html="showDate(scope.row.expressNum)"
-              @click="kdi(scope.row.expressNum)"></span>
+              @click="kdi(scope.row.expressNum,scope.row.orderId)"></span>
           </template>
         </el-table-column>
         <el-table-column label="支付状态"
@@ -152,6 +152,11 @@
     <el-dialog title="物流信息"
       :visible.sync="dialogVisible"
       width="30%">
+      <el-button type="primary"
+        style="float:right"
+        icon="el-icon-edit"
+        @click="sendDialog2 = true"
+        circle></el-button>
       <el-table :data="kdiInfo">
         <el-table-column width="150"
           property="time"
@@ -159,11 +164,26 @@
         <el-table-column property="status"
           label="状态"></el-table-column>
       </el-table>
+      <el-dialog title="物流信息"
+        :visible.sync="sendDialog2"
+        width="30%"
+        append-to-body>
+        <el-input v-model="expressNum"
+          placeholder="请输入快递单号"></el-input>
+        <span slot="footer"
+          class="dialog-footer">
+          <el-button @click="sendDialog2 = false">取 消</el-button>
+          <el-button type="primary"
+            @click="sendTo()">确 定</el-button>
+        </span>
+      </el-dialog>
+
     </el-dialog>
     <el-dialog title="物流信息"
       :visible.sync="sendDialog"
       width="30%">
-      <el-input v-model="expressNum"></el-input>
+      <el-input v-model="expressNum"
+        placeholder="请输入快递单号"></el-input>
       <span slot="footer"
         class="dialog-footer">
         <el-button @click="sendDialog = false">取 消</el-button>
@@ -182,9 +202,10 @@ export default {
       currentPage: 1,
       pageSize: 5,
       pageInfo: {},
-      kdiInfo: '',
+      kdiInfo: [],
       dialogVisible: false,
       sendDialog: false,
+      sendDialog2: false,
       expressNum: '',
       orderId: ''
     }
@@ -206,11 +227,14 @@ export default {
         )
         .then(res => {
           this.sendDialog = false
+          this.sendDialog2 = false
+          this.dialogVisible = false
           this.getData()
           this.$message.success('填写成功')
         })
     },
-    kdi(no) {
+    kdi(no, id) {
+      this.orderId = id
       const qs = require('qs')
       this.$http.post('/other/kdi', qs.stringify({ no: no })).then(res => {
         this.kdiInfo = res.data.data.result.list
